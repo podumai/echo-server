@@ -1,0 +1,29 @@
+find_package(fmt REQUIRED)
+
+set(SERVER)
+add_executable(SERVER)
+target_sources(
+  SERVER
+    PRIVATE
+      "${CMAKE_CURRENT_SOURCE_DIR}/server.cpp"
+)
+target_link_libraries(
+  SERVER
+    PRIVATE
+      fmt::fmt
+)
+target_compile_features(
+  SERVER
+    PRIVATE
+      cxx_std_23
+    PUBLIC
+      cxx_std_17
+)
+set_target_properties(
+  SERVER
+    PROPERTIES
+      OUTPUT_NAME
+        "server$<$<PLATFORM_ID:Windows>:.exe>"
+      RUNTIME_OUTPUT_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}/bin"
+)
