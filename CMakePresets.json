@@ -1,0 +1,59 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "debug",
+      "hidden": false,
+      "displayName": "[Debug] Configuration preset (Default build generator)",
+      "description": "Debug configuration preset using default build generator",
+      "binaryDir": "build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "hidden": false,
+      "displayName": "[Release] Configuration preset (Default build generator)",
+      "description": "Release configuration preset using default build generator",
+      "binaryDir": "build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "base-build",
+      "hidden": true,
+      "displayName": "[Base] Build configuration (Abstract)",
+      "description": "Base build configuration (Abstract)",
+      "verbose": false
+    },
+    {
+      "name": "debug",
+      "hidden": false,
+      "displayName": "[Debug] Build configuration (Default build generator)",
+      "description": "Debug build configuration using default build generator",
+      "configurePreset": "debug",
+      "inherits": [
+        "base-build"
+      ]
+    },
+    {
+      "name": "release",
+      "hidden": false,
+      "displayName": "[Release] Build configuration (Default build generator)",
+      "description": "Release build configuration using default build generator",
+      "configurePreset": "release",
+      "inherits": [
+        "base-build"
+      ]
+    }
+  ]
+}
