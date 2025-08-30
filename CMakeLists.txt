@@ -5,4 +5,7 @@ project(
   LANGUAGES CXX C 
   DESCRIPTION "Echo server and client implementations (purpose: educational)"
 )
+
+option(BUILD_LINUX_IMPL "Build specific Linux implementation" OFF)
+
 add_subdirectory(echo-server)
