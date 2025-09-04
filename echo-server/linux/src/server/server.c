@@ -27,35 +27,27 @@ static const unsigned kWorkersCount = 4U;
 static const int kMessageBufferSize = 256;
 static const int kPthreadCreateSuccess = 0;
 
-__attribute__((nonnull(1, 2))) __attribute__((warn_unused_result))
+__attribute__((nonnull(1))) __attribute__((warn_unused_result))
 static int CreateSocket(
-  struct Socket* sock, //
-  struct sockaddr_in* sock_info,
-  int buffer_size
+  struct sockaddr_in* sock_info
 )
 {
-  sock->socketfd_ = socket(AF_INET, SOCK_STREAM, 0);
-  if (sock->socketfd_ == kSocketFailed)
+  int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockfd == kSocketFailed)
   {
     return kSocketFailed;
   }
-  int error_code = bind(sock->socketfd_, (struct sockaddr*) sock_info, sizeof(struct sockaddr_in));
+  int error_code = bind(sockfd, (struct sockaddr*) sock_info, sizeof(struct sockaddr_in));
   if (error_code == kBindFailed)
   {
     return kBindFailed;
   }
-  error_code = listen(sock->socketfd_, kSocketPendingConnections);
+  error_code = listen(sockfd, kSocketPendingConnections);
   if (error_code == kListenFailed)
   {
     return kListenFailed;
   }
-  sock->buffer_.data_ = malloc(buffer_size);
-  if (sock->buffer_.data_ == MALLOC_FAILED)
-  {
-    return kSocketBufferAllocFailed;
-  }
-  sock->buffer_.size_ = buffer_size;
-  return 0;
+  return sockfd;
 }
 
 int InitializeServerSockets(struct Server* server)
@@ -69,8 +61,8 @@ int InitializeServerSockets(struct Server* server)
   for (int i = 0; i < SERVER_SOCKETS_COUNT; ++i)
   {
     server_addr.sin_port = htons(kServerBasePort + i);
-    int error_code = CreateSocket(server->sockets_ + i, &server_addr, kSocketBufferSize);
-    if (error_code == kSocketFailed)
+    server->sockets_[i] = CreateSocket(&server_addr);
+    if (server->sockets_[i] == kSocketFailed)
     {
       return kSocketFailed;
     }
@@ -88,8 +80,8 @@ int RegisterServerSockets(int epfd, struct Server* server)
   ev.events = EPOLLIN;
   for (int i = 0; i < SERVER_SOCKETS_COUNT; ++i)
   {
-    ev.data.fd = server->sockets_[i].socketfd_;
-    int error_code = epoll_ctl(epfd, EPOLL_CTL_ADD, server->sockets_[i].socketfd_, &ev);
+    ev.data.fd = server->sockets_[i];
+    int error_code = epoll_ctl(epfd, EPOLL_CTL_ADD, server->sockets_[i], &ev);
     if (error_code == kEpollCtlFailed)
     {
       return kEpollCtlFailed;

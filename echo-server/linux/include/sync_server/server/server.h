@@ -4,21 +4,9 @@
 
 #define SERVER_SOCKETS_COUNT 10
 
-struct SocketBuffer
-{
-  unsigned char* data_;
-  int size_;
-};
-
-struct Socket
-{
-  int socketfd_;
-  struct SocketBuffer buffer_;
-};
-
 struct Server
 {
-  struct Socket sockets_[SERVER_SOCKETS_COUNT];
+  int sockets_[SERVER_SOCKETS_COUNT];
   struct sockaddr_in info_;
 };
 
