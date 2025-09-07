@@ -1,17 +1,17 @@
-#include <sync_server/logger/logger.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sync_server/logger/logger.h>
 #include <time.h>
-#include <pthread.h>
 
 static pthread_mutex_t logger_m = PTHREAD_MUTEX_INITIALIZER;
 static const int kLoggerBufferSize = 256;
 static const int kMutexLockSuccess = 0;
 static const int kMutexUnlockSuccess = 0;
 
-__attribute__((nonnull(1, 2)))
+__attribute__((nonnull(1, 2))) //
 void CreateLog(
-  const char* level, //
+  const char* level,  //
   const char* message,
   unsigned long id
 )
