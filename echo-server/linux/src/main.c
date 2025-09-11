@@ -35,7 +35,7 @@ sem_t control_semaphore;
 static void ConnectionExpiredHandler(
   __attribute__((unused)) int signal,  //
   siginfo_t* si,
-  __attribute__((unused)) void*
+  __attribute__((unused)) void* context
 )
 {
   int clientfd = *((int*) si->si_value.sival_ptr);
@@ -44,10 +44,10 @@ static void ConnectionExpiredHandler(
   snprintf(
     message_buffer,  //
     kMessageBufferSize,
-    "connection time expired for: %d",
+    "[MESSAGE] Connection time expired for: %d",
     clientfd
   );
-  LOG_WARNING(message_buffer, si->si_pid);
+  LOG_WARNING(message_buffer, gettid());
 }
 
 // clang-format off

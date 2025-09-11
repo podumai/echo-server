@@ -256,6 +256,10 @@ static void* WorkerFunction(
         );
         LOG_FATAL(message_buffer, worker_id);
       }
+      else if (bytes == 0)
+      {
+        break;
+      }
 
       processed_bytes += bytes;
       bytes = write(clientfd, buffer, bytes);
@@ -284,6 +288,12 @@ static void* WorkerFunction(
 
     shutdown(clientfd, SHUT_RDWR);
     close(clientfd);
+
+    if (errno)
+    {
+      errno = 0;
+      continue;
+    }
     snprintf(
       message_buffer,  //
       kMessageBufferSize,
