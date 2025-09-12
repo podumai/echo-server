@@ -1,4 +1,4 @@
-add_subdirectory(beast)
+add_subdirectory(asio)
 
 if(BUILD_LINUX_IMPL)
   message(STATUS "Linux implementation build: selected")
