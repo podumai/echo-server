@@ -7,24 +7,35 @@
   },
   "configurePresets": [
     {
+      "name": "base-configure",
+      "hidden": true,
+      "displayName": "[Base] Configuration preset (Default build generator)",
+      "description": "Base configuration preset using default build generator",
+      "binaryDir": "${sourceDir}/build"
+    },
+    {
       "name": "debug",
       "hidden": false,
       "displayName": "[Debug] Configuration preset (Default build generator)",
       "description": "Debug configuration preset using default build generator",
-      "binaryDir": "build/debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
-      }
+      },
+      "inherits": [
+        "base-configure"
+      ]
     },
     {
       "name": "release",
       "hidden": false,
       "displayName": "[Release] Configuration preset (Default build generator)",
       "description": "Release configuration preset using default build generator",
-      "binaryDir": "build/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
-      }
+      },
+      "inherits": [
+        "base-configure"
+      ]
     }
   ],
   "buildPresets": [

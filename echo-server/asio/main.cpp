@@ -1,4 +1,5 @@
 #include <boost/asio.hpp>
+#include <fmt/core.h>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -10,18 +11,23 @@ namespace net = boost::asio;
 namespace
 {
 
-constexpr unsigned kServerPort{10000U};
 constexpr int kConcurrencyHint{1};
 
 }
 
 auto main(
-  [[maybe_unused]] int argc,  //
-  [[maybe_unused]] char* argv[]
+  int argc,  //
+  char* argv[]
 ) -> int
 {
+  if (argc != 2 || std::string_view{argv[1]} == "--help")
+  {
+    fmt::print(stderr, "Usage: {} <port>\n", argv[0]);
+    return 1;
+  }
+  net::ip::port_type server_port{static_cast<net::ip::port_type>(atoi(argv[1]))};
   net::io_context context{kConcurrencyHint};
-  tcp::Server server{context, kServerPort};
+  tcp::Server server{context, server_port};
   server.AsyncAccept();
   context.run();
   return 0;
